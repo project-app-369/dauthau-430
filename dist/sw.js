@@ -1,9 +1,9 @@
 'use strict';
-const VERSION='2df6173e5629e0b9';
+const VERSION='a054fcf2c73c4eb6';
 const ROOT=new URL('./',self.registration.scope);
 const PREFIX='dauthau-430:'+ROOT.pathname+':';
 const CACHE=PREFIX+VERSION;
-const SHELL=["./", "./index.html", "./manifest.webmanifest", "./offline.html", "./bai-giang.html", "./icons/app-icon.svg", "./icons/apple-touch-icon.png", "./icons/favicon-32.png", "./icons/favicon-16.png", "./icons/app-icon-192.png", "./icons/app-icon-512.png", "./icons/app-maskable-512.png"].map(p=>new URL(p,ROOT).href);
+const SHELL=["./", "./index.html", "./manifest.webmanifest", "./offline.html", "./bai-giang.html", "./icons/brand-3f67915ac4-app-icon.svg", "./icons/brand-3f67915ac4-app-icon-192.png", "./icons/brand-3f67915ac4-app-icon-512.png", "./icons/brand-3f67915ac4-app-maskable-512.png", "./icons/brand-3f67915ac4-apple-touch-icon.png", "./icons/brand-3f67915ac4-favicon-16.png", "./icons/brand-3f67915ac4-favicon-32.png", "./icons/brand-3f67915ac4-favicon.ico"].map(p=>new URL(p,ROOT).href);
 self.addEventListener('install',event=>{event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(SHELL);await self.skipWaiting();})());});
 self.addEventListener('activate',event=>{event.waitUntil((async()=>{const names=await caches.keys();await Promise.all(names.filter(name=>name.startsWith(PREFIX)&&name!==CACHE).map(name=>caches.delete(name)));await self.clients.claim();})());});
 self.addEventListener('fetch',event=>{const req=event.request,url=new URL(req.url);if(req.method!=='GET'||url.origin!==ROOT.origin||!url.pathname.startsWith(ROOT.pathname))return;

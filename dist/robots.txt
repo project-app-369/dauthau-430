@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dauthau-430.ptsc-7423.chatgpt.site/sitemap.xml
