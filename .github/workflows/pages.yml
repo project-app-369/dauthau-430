@@ -42,4 +42,29 @@ jobs:
           exit 1
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/github-script@v8
+        with:
+          script: |
+            // Use the visible REST artifact ID directly; the results-service
+            // discovery endpoint can lag behind an already successful upload.
+            const {owner, repo} = context.repo;
+            const response = await github.rest.actions.listWorkflowRunArtifacts({owner, repo, run_id: context.runId});
+            const artifact = response.data.artifacts.find(a => a.name === 'github-pages' && !a.expired);
+            if (!artifact) throw new Error('Pages artifact is unavailable');
+            const oidc = await core.getIDToken();
+            core.setSecret(oidc);
+            const {data: deployment} = await github.request('POST /repos/{owner}/{repo}/pages/deployments', {
+              owner, repo, artifact_id: artifact.id, pages_build_version: context.sha, oidc_token: oidc
+            });
+            for (let attempt = 0; attempt < 60; attempt++) {
+              const {data: status} = await github.request('GET /repos/{owner}/{repo}/pages/deployments/{deployment_id}', {
+                owner, repo, deployment_id: deployment.id
+              });
+              if (status.status === 'succeed') {
+                core.setOutput('page_url', deployment.page_url || 'https://project-app-369.github.io/dauthau-430/');
+                return;
+              }
+              if (['errored','failed','canceled'].includes(status.status)) throw new Error('Pages deployment: ' + status.status);
+              await new Promise(resolve => setTimeout(resolve, 5000));
+            }
+            throw new Error('Pages deployment did not finish within 5 minutes');
