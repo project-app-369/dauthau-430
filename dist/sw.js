@@ -1,5 +1,5 @@
 'use strict';
-const VERSION='d5f2408607bb55e4';
+const VERSION='3742293e03b90a20';
 const ROOT=new URL('./',self.registration.scope);
 const PREFIX='dauthau-430:'+ROOT.pathname+':';
 const CACHE=PREFIX+VERSION;

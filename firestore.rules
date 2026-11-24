@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    match /users/{uid}/courses/dauthau-430/events/{eventId} {
+      allow read: if owner(uid);
+      // Append-only, with identical retries permitted for offline delivery.
+      allow create: if owner(uid)
+        && request.resource.data.keys().hasOnly(['version','id','stamp','kind','items','attempts'])
+        && request.resource.data.version == 1
+        && request.resource.data.id == eventId
+        && request.resource.data.stamp is string
+        && request.resource.data.stamp.size() <= 180
+        && request.resource.data.kind in ['edit','reset']
+        && request.resource.data.items is map
+        && request.resource.data.items.size() <= 430
+        && request.resource.data.attempts is list
+        && request.resource.data.attempts.size() <= 20;
+      allow update: if owner(uid) && request.resource.data == resource.data;
+      allow delete: if false;
+    }
+  }
+}

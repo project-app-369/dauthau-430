@@ -16,7 +16,7 @@ Serve `.webmanifest` as `application/manifest+json` (or JSON) and `sw.js` as Jav
 
 The install icon uses the native install prompt when available. On Safari/iOS or when a prompt is unavailable, it opens platform instructions. Installation requires the user's browser confirmation. The icon is hidden in standalone mode.
 
-After the first successful online load, the worker caches the shell: all 430 questions, explanations, flashcards and quizzes work offline. PDFs and external law pages require network; PDFs are not automatically downloaded. Progress and theme are device-local; use JSON export/import between domains or devices.
+After the first successful online load, the worker caches the shell: all 430 questions, explanations, flashcards and quizzes work offline. PDFs and external law pages require network; PDFs are not automatically downloaded. Google sign-in enables automatic progress sync through Firebase. Guest progress, theme and unfinished quizzes stay local. See [FIREBASE-SETUP.md](FIREBASE-SETUP.md) for required providers, authorized domains and Firestore rules. Add any new shared-hosting/CDN hostname to Firebase Authorized domains before using login there.
 
 Each build derives a worker cache version from content. Activation deletes only older caches of this app at the same path and claims clients; it does not reset progress or reload an active quiz. Reopen/reload to use new HTML. Theme transitions respect reduced motion.
 
@@ -28,4 +28,4 @@ Pages source uses **GitHub Actions**. `.github/workflows/pages.yml` builds and p
 
 ## Content and privacy
 
-Answers follow the supplied PDF, including historical notes; no independent legal consolidation is claimed. Answer keys are visible in static source, suitable for self study. No account backend or analytics. Public hosting makes the included reference PDFs accessible.
+Answers follow the supplied PDF, including historical notes; no independent legal consolidation is claimed. Answer keys are visible in static source, suitable for self study. Optional Google login uses Firebase Authentication and owner-only Firestore learning events; no Analytics is initialized. Public hosting makes the included reference PDFs accessible.
