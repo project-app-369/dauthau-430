@@ -1,0 +1,72 @@
+[
+  {
+    "id": "nen-tang",
+    "title": "Nền tảng & phạm vi",
+    "guide": "Nhận diện đúng nguồn vốn, chủ thể và loại gói thầu trước khi chọn quy định."
+  },
+  {
+    "id": "hinh-thuc",
+    "title": "Hình thức & quy trình",
+    "guide": "So sánh điều kiện áp dụng, hạn mức và các bước của từng hình thức lựa chọn."
+  },
+  {
+    "id": "ke-hoach",
+    "title": "Kế hoạch & giá gói thầu",
+    "guide": "Tách căn cứ lập kế hoạch, cấu phần giá và trách nhiệm phê duyệt."
+  },
+  {
+    "id": "ho-so",
+    "title": "Hồ sơ & đánh giá",
+    "guide": "Đọc riêng tính hợp lệ, năng lực kinh nghiệm, kỹ thuật và tài chính."
+  },
+  {
+    "id": "bao-dam",
+    "title": "Bảo đảm & tư cách",
+    "guide": "Phân biệt bảo đảm dự thầu với bảo đảm thực hiện hợp đồng; kiểm tra tư cách và độc lập."
+  },
+  {
+    "id": "hop-dong",
+    "title": "Hợp đồng & thực hiện",
+    "guide": "Nhận diện loại hợp đồng, điều kiện sửa đổi và trách nhiệm khi thực hiện."
+  },
+  {
+    "id": "tap-trung",
+    "title": "Mua sắm tập trung & y tế",
+    "guide": "Đối chiếu danh mục, thỏa thuận khung, khả năng cung cấp và các trường hợp y tế."
+  },
+  {
+    "id": "trach-nhiem",
+    "title": "Thẩm quyền & vi phạm",
+    "guide": "Xác định đúng chủ thể, trách nhiệm, hành vi vi phạm và cơ chế xử lý."
+  },
+  {
+    "id": "kien-nghi",
+    "title": "Kiến nghị & giải quyết",
+    "guide": "Đọc kỹ đối tượng kiến nghị, thời điểm gửi, thẩm quyền và chi phí."
+  },
+  {
+    "id": "tinh-huong",
+    "title": "Xử lý tình huống",
+    "guide": "Tách dữ kiện của tình huống, điều kiện ngoại lệ và phương án được phép."
+  },
+  {
+    "id": "qua-mang",
+    "title": "Đấu thầu qua mạng",
+    "guide": "Theo dõi trình tự trên Hệ thống, hồ sơ điện tử và cách xử lý sự cố."
+  },
+  {
+    "id": "truc-tuyen",
+    "title": "Chào giá & mua sắm trực tuyến",
+    "guide": "Phân biệt chào giá thông thường, rút gọn và mua sắm trực tuyến."
+  },
+  {
+    "id": "hiep-dinh",
+    "title": "CPTPP · EVFTA · UKVFTA",
+    "guide": "Xác định hiệp định, phạm vi, ngưỡng áp dụng và thời điểm của câu hỏi."
+  },
+  {
+    "id": "nha-dau-tu",
+    "title": "Lựa chọn nhà đầu tư",
+    "guide": "Phân biệt lựa chọn nhà đầu tư với lựa chọn nhà thầu; chú ý phương pháp đánh giá."
+  }
+]

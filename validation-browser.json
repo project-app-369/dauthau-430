@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "browser": "Edge headless",
+  "checks": [
+    "fresh state",
+    "feedback with changing status",
+    "bookmark",
+    "flashcard learned-only",
+    "spaced review dates",
+    "accent-free search",
+    "exact question search",
+    "5/10/20 unique questions",
+    "5-question session resume",
+    "full correct and full incorrect grades",
+    "no answers before submission",
+    "history without extra attempts",
+    "20-question topic lesson",
+    "PDF links",
+    "reload persistence",
+    "390px no-overflow all views",
+    "storage denied fallback",
+    "keyboard answer",
+    "reduced-motion",
+    "export/import roundtrip",
+    "zero answered quiz = 0%",
+    "duplicate submission idempotent",
+    "corrupt storage recovery"
+  ],
+  "pageErrors": []
+}

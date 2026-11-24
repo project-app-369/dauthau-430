@@ -1,0 +1,12 @@
+{
+  "questionSource": "G:\\My Drive\\P.A.R.A\\3. RESOURCES\\Đấu thầu\\Đáp án 430 câu hỏi Đấu thầu kèm giải thích.pdf",
+  "sha256": "552e734050bdcb1b041fb0f1ef116d554084c8a467aed244baaa755ed3851721",
+  "pages": 139,
+  "extraction": "pypdf text; correct answer from bold option font; increasing IDs 1–430; page consistency checked",
+  "lecture": {
+    "path": "G:\\My Drive\\P.A.R.A\\3. RESOURCES\\Đấu thầu\\TAI LIEU BAI GIANG KH NGHIEP VU CHUYEN MON DAU THAU.pdf",
+    "pages": 416
+  },
+  "created": "2026-11-24",
+  "scope": "Study source answers; preserve historical notes; no claim of legal consolidation"
+}
