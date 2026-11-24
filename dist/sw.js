@@ -1,0 +1,12 @@
+'use strict';
+const VERSION='605c0e6fe81570c6';
+const ROOT=new URL('./',self.registration.scope);
+const PREFIX='dauthau-430:'+ROOT.pathname+':';
+const CACHE=PREFIX+VERSION;
+const SHELL=['./','./index.html','./manifest.webmanifest','./offline.html','./bai-giang.html','./icons/icon-192.png','./icons/icon-512.png','./icons/maskable-512.png','./icons/apple-touch-icon.png'].map(p=>new URL(p,ROOT).href);
+self.addEventListener('install',event=>{event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(SHELL);await self.skipWaiting();})());});
+self.addEventListener('activate',event=>{event.waitUntil((async()=>{const names=await caches.keys();await Promise.all(names.filter(name=>name.startsWith(PREFIX)&&name!==CACHE).map(name=>caches.delete(name)));await self.clients.claim();})());});
+self.addEventListener('fetch',event=>{const req=event.request,url=new URL(req.url);if(req.method!=='GET'||url.origin!==ROOT.origin||!url.pathname.startsWith(ROOT.pathname))return;
+ if(req.mode==='navigate')event.respondWith((async()=>{const cache=await caches.open(CACHE);try{const response=await fetch(req);if(response.ok&&SHELL.includes(url.href))await cache.put(req,response.clone());return response;}catch{const exact=await cache.match(req,{ignoreSearch:true});if(exact)return exact;const appPath=url.pathname===ROOT.pathname||url.pathname===new URL('index.html',ROOT).pathname;return await cache.match(new URL(appPath?'index.html':'offline.html',ROOT).href);}})());
+ else if(SHELL.includes(url.href))event.respondWith((async()=>{const cache=await caches.open(CACHE);return await cache.match(req)||fetch(req);})());
+});

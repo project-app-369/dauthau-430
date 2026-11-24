@@ -7,6 +7,7 @@ function icon(name){const paths={
  progress:'<path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/>',
  check:'<path d="m5 12 4 4L19 6"/>',
  star:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/>',
+ install:'<path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/>',
  moon:'<path d="M21 13a9 9 0 0 1-10-10A9 9 0 1 0 21 13Z"/>',
  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/>'
 };return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(paths[name]||paths.learn)+'</svg>';}
@@ -14,7 +15,7 @@ function icon(name){const paths={
 const themeButton=document.getElementById('themeToggle');
 const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
 let themeBusy=false;
-function syncThemeButton(){const dark=document.documentElement.dataset.theme==='dark';themeButton.innerHTML=icon(dark?'sun':'moon')+'<span class="theme-label">'+(dark?'Sáng':'Tối')+'</span>';themeButton.setAttribute('aria-label',dark?'Chuyển sang giao diện sáng':'Chuyển sang giao diện tối');themeButton.setAttribute('aria-pressed',String(dark));document.querySelector('meta[name="theme-color"]').content=dark?'#101820':'#edf5fc';}
+function syncThemeButton(){const dark=document.documentElement.dataset.theme==='dark';themeButton.innerHTML=icon(dark?'sun':'moon');themeButton.setAttribute('aria-label',dark?'Chuyển sang giao diện sáng':'Chuyển sang giao diện tối');themeButton.setAttribute('aria-pressed',String(dark));document.querySelector('meta[name="theme-color"]').content=dark?'#101820':'#edf5fc';}
 async function switchTheme(event){if(themeBusy)return;const buttonRect=themeButton.getBoundingClientRect();const x=event.detail===0?buttonRect.left+buttonRect.width/2:event.clientX,y=event.detail===0?buttonRect.top+buttonRect.height/2:event.clientY;
 const next=document.documentElement.dataset.theme==='dark'?'light':'dark';
 const apply=()=>{document.documentElement.dataset.theme=next;try{localStorage.setItem('dau-thau-theme',next);}catch{}syncThemeButton();};
