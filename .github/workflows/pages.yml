@@ -20,6 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build portable static PWA
+        env:
+          PUBLIC_SITE_URL: https://project-app-369.github.io/dauthau-430/
         run: python3 build-site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

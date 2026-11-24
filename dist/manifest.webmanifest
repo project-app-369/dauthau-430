@@ -2,7 +2,7 @@
   "id": "./",
   "name": "430 Câu ôn luyện Đấu thầu",
   "short_name": "dauthau-430",
-  "description": "Học 430 câu hỏi đấu thầu, giải thích, flashcard và ôn luyện 5–10–20 câu.",
+  "description": "Ôn luyện trọn bộ 430 câu hỏi đấu thầu với giải thích, dẫn chiếu pháp luật và bài giảng, flashcard và các lượt ôn 5–10–20 câu.",
   "lang": "vi",
   "start_url": "./",
   "scope": "./",
@@ -10,11 +10,50 @@
   "background_color": "#edf5fc",
   "theme_color": "#0067c0",
   "orientation": "any",
-  "categories": ["education", "productivity"],
+  "categories": [
+    "education",
+    "productivity"
+  ],
   "prefer_related_applications": false,
   "icons": [
-    {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
-    {"src":"icons/maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+    {
+      "src": "icons/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/app-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "dir": "ltr",
+  "shortcuts": [
+    {
+      "name": "Học câu hỏi",
+      "short_name": "Học",
+      "description": "Tiếp tục học bộ 430 câu",
+      "url": "./?mode=learn"
+    },
+    {
+      "name": "Ôn luyện nhanh",
+      "short_name": "Ôn luyện",
+      "description": "Luyện 5, 10 hoặc 20 câu",
+      "url": "./?mode=quiz"
+    },
+    {
+      "name": "Flashcard",
+      "short_name": "Flashcard",
+      "description": "Kiểm tra các câu đã học",
+      "url": "./?mode=flash"
+    }
   ]
 }
