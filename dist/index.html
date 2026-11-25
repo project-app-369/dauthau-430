@@ -291,7 +291,7 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
  function apply(){const state=M.materialize(events.values());baseline={...host.read(),items:state.items,attempts:state.attempts};host.apply(state.items,state.attempts);}
  function schedule(){clearTimeout(retryTimer);retryTimer=setTimeout(flush,300);}
  async function flush(){
-  if(!account||!auth?.currentUser||auth.currentUser.uid!==account||!ready||busy||!navigator.onLine)return;
+  if(!account||!auth?.currentUser||auth.currentUser.uid!==account||!ready||busy||!navigator.onLine||!outbox.length)return;
   const run=epoch,owner=account;busy=true;
   try{
    while(outbox.length&&epoch===run){
