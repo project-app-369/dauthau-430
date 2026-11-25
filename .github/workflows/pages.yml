@@ -48,8 +48,16 @@ jobs:
             // Use the visible REST artifact ID directly; the results-service
             // discovery endpoint can lag behind an already successful upload.
             const {owner, repo} = context.repo;
-            const response = await github.rest.actions.listWorkflowRunArtifacts({owner, repo, run_id: context.runId});
-            const artifact = response.data.artifacts.find(a => a.name === 'github-pages' && !a.expired);
+            let artifact;
+            for (let attempt = 0; attempt < 24; attempt++) {
+              const response = await github.rest.actions.listWorkflowRunArtifacts({
+                owner, repo, run_id: context.runId, per_page: 100,
+                headers: {'Cache-Control': 'no-cache'}
+              });
+              artifact = response.data.artifacts.find(a => a.name === 'github-pages' && !a.expired);
+              if (artifact) break;
+              await new Promise(resolve => setTimeout(resolve, 5000));
+            }
             if (!artifact) throw new Error('Pages artifact is unavailable');
             const oidc = await core.getIDToken();
             core.setSecret(oidc);
