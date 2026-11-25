@@ -10,6 +10,6 @@ Each target build emits server-rendered metadata into the initial HTML head. Cra
 
 `tools/render-social-assets.cjs` renders the thumbnails from the existing Fluent application and SVG identity. `build-static.py` gives thumbnails and icon assets content-hashed filenames. Changing the image content therefore changes its public URL and avoids reusing a stale image URL. Existing filenames are retained so old shares do not break.
 
-GitHub Pages builds with its own `PUBLIC_SITE_URL`; ChatGPT Sites uses its own canonical domain. Portable builds omit a fixed canonical and retain relative image URLs until an explicit final site URL is configured.
+GitHub Pages is the active publication target and the default canonical domain. ChatGPT Sites public access and updates were withdrawn on 2026-11-25. Portable builds omit a fixed canonical and retain relative image URLs until an explicit final site URL is configured.
 
 Social platforms cache both page metadata and images. Publishing updates the public HTML/assets; it does not force an existing Facebook, LinkedIn, X or Zalo cached preview to refresh immediately. Their rescrape/debug tools may be needed for an already-shared URL.

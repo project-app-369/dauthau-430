@@ -1,18 +1,20 @@
 # dauthau-430 — static distribution
 
-Title: **430 Câu ôn luyện Đấu thầu**. App/repository name: **dauthau-430**.
+Title: **Đấu Thầu 430 câu**. App/repository name: **dauthau-430**.
 
-Run `python build-site.py` to update `dist/`. No npm, framework, CDN library, database, server runtime or API key is required. Committed reference PDFs and icons are retained. All questions, answer keys, styles and application code are inline.
+The sole active production host is **GitHub Pages**. On 2026-11-25, the user requested withdrawal from public ChatGPT Sites and no further updates there. That Site now has owner-only access; its active hosting manifest has been replaced by `.openai/hosting.disabled.json`. Follow the deployment policy in `AGENTS.md`.
+
+Run `python build-site.py` to update `dist/`. No npm or framework build is required. Questions, answer keys, styles and application code are inline; committed reference PDFs and icons are retained. Online login and sync use Firebase and Google's hosted SDK.
 
 ## CDN or shared hosting
 
 Upload **the contents of `dist/`**, preserving `icons/` and all filenames, to a document root or a subdirectory such as `/dauthau-430/`. Enable HTTPS; localhost also works. Relative manifest/start/scope/asset paths support both root and subdirectory installs.
 
-Build metadata for a specific domain with `python build-site.py --site-url https://example.com/dauthau-430/`. This sets canonical, Open Graph, social-image URLs and WebApplication structured data. The default target is ChatGPT Sites. GitHub Actions sets `PUBLIC_SITE_URL` to the GitHub Pages URL. For a portable package without a fixed canonical domain, run `python build-site.py --portable --out-dir path/to/output`; configure a final URL before publishing when social previews/SEO matter. `app-metadata.json` is the shared title/description source.
+Build metadata for a specific domain with `python build-site.py --site-url https://example.com/dauthau-430/`. This sets canonical, Open Graph, social-image URLs and WebApplication structured data. The default target is GitHub Pages. GitHub Actions sets `PUBLIC_SITE_URL` to the same GitHub Pages URL. For a portable package without a fixed canonical domain, run `python build-site.py --portable --out-dir path/to/output`; configure a final URL before publishing when social previews/SEO matter. `app-metadata.json` is the shared title/description source.
 
 Serve `.webmanifest` as `application/manifest+json` (or JSON) and `sw.js` as JavaScript. Recommended cache headers for `sw.js`, `index.html`, `manifest.webmanifest`, `version.json`: `Cache-Control: no-cache`. Keep the worker scope limited to the app directory. No SPA rewrite is needed. Do not cache an authentication page as index.html.
 
-The public builds use App Check with a reCAPTCHA Enterprise key restricted to the GitHub Pages and ChatGPT Sites domains. Before deploying to another CDN/shared-hosting domain, register that hostname in both Firebase Auth Authorized domains and the reCAPTCHA key's allowed domains. `firebase-appcheck.json` holds the public site key; it is embedded in the built HTML. See [FIREBASE-SETUP.md](FIREBASE-SETUP.md). Firestore App Check remains Enforced; billing is not enabled by this setup.
+The active public build uses App Check with a reCAPTCHA Enterprise key that allows GitHub Pages; its existing registration also retains the former ChatGPT Sites hostname for historical compatibility. Before deploying to another CDN/shared-hosting domain, register that hostname in both Firebase Auth Authorized domains and the reCAPTCHA key's allowed domains. `firebase-appcheck.json` holds the public site key; it is embedded in the built HTML. See [FIREBASE-SETUP.md](FIREBASE-SETUP.md). Firestore App Check remains Enforced; billing is not enabled by this setup.
 
 ## PWA
 
@@ -26,7 +28,7 @@ The cache version includes icon/static-asset content. The app includes regular 1
 
 ## GitHub Pages
 
-Pages source uses **GitHub Actions**. `.github/workflows/pages.yml` builds and publishes `dist/` on pushes to `main`. Project route: `https://project-app-369.github.io/dauthau-430/`. The same output is published on ChatGPT Sites.
+Pages source uses **GitHub Actions**. `.github/workflows/pages.yml` builds and publishes `dist/` on pushes to `main`. Project route: `https://project-app-369.github.io/dauthau-430/`. ChatGPT Sites publication and source synchronization are disabled.
 
 ## Content and privacy
 

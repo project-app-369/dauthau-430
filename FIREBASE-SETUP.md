@@ -1,13 +1,12 @@
 # Firebase login and automatic sync
 
-The supplied public web config is in `firebase-client.js`. No Admin SDK key is needed or included. Google login works on both public deployments after the following Firebase Console settings are enabled.
+The supplied public web config is in `firebase-client.js`. No Admin SDK key is needed or included. The active public deployment is GitHub Pages; ChatGPT Sites public access and further updates were withdrawn on 2026-11-25. Google login works after the following Firebase Console settings are enabled.
 
 ## One-time project setup
 
 1. Open https://console.firebase.google.com/project/dauthau-430/authentication/providers. Click **Get started** if needed; enable **Google**, select a support email, and save.
 2. In **Authentication → Settings → Authorized domains**, add the hostnames below (no scheme or path):
    - `project-app-369.github.io`
-   - `dauthau-430.ptsc-7423.chatgpt.site`
    - `localhost` only if testing locally.
 3. Open https://console.firebase.google.com/project/dauthau-430/firestore and create the **(default)** Cloud Firestore database in **production mode**. Choose a suitable location; the app does not require a particular region.
 4. In **Firestore → Rules**, paste the complete contents of [firestore.rules](firestore.rules) and click **Publish**. Alternatively, with your own Firebase CLI login, run `firebase deploy --only firestore:rules --project dauthau-430` in this repository. Do not deploy permissive test-mode rules.
@@ -18,11 +17,11 @@ Only the authenticated owner can read or append their learning events. Existing 
 
 `firebase-appcheck.json` contains only a public reCAPTCHA Enterprise site key and allowed production domains. When configured, the app initializes App Check before Auth/Firestore and enables automatic token refresh. Native Firestore listeners use the SDK's App Check provider; the HTTPS fallback sends `X-Firebase-AppCheck` on both reads and commits. Failed attestation leaves progress in the local outbox and does not send an unverified request.
 
-If Firestore App Check is Enforced, its web app must have a working provider and the deployed frontend must contain its matching public site key. A successful Google login alone cannot satisfy App Check. Register the production key for both `project-app-369.github.io` and `dauthau-430.ptsc-7423.chatgpt.site`. Additional CDN/shared-hosting domains require both Firebase Auth authorization and reCAPTCHA key domain registration. Do not put a site secret, debug token or service-account key in static source. Automated local tests use an injected provider; production deployments use the registered Enterprise provider.
+If Firestore App Check is Enforced, its web app must have a working provider and the deployed frontend must contain its matching public site key. A successful Google login alone cannot satisfy App Check. The production key must allow `project-app-369.github.io`; the existing key also retains the retired ChatGPT Sites hostname as a legacy registration. Additional CDN/shared-hosting domains require both Firebase Auth authorization and reCAPTCHA key domain registration. Do not put a site secret, debug token or service-account key in static source. Automated local tests use an injected provider; production deployments use the registered Enterprise provider.
 
 ## Verification after enabling Firebase
 
-Open each public app directly in a browser (not an embedded in-app webview), click the profile icon, and sign in with Google. The status should become **Đã đồng bộ**. On device A, answer a question and mark another question. On device B, sign in with the same Google account; both changes should appear automatically. Repeat in the opposite direction. Go offline on A, answer another question, reload, then reconnect; the result must remain and reach B. Sign out; the browser's separate guest progress should reappear. Verify that another Google account cannot see the first account's progress.
+Open the GitHub Pages app directly in a browser on two devices, click the profile icon, and sign in with Google. The status should become **Đã đồng bộ**. On device A, answer a question and mark another question. On device B, sign in with the same Google account; both changes should appear automatically. Repeat in the opposite direction. Go offline on A, answer another question, reload, then reconnect; the result must remain and reach B. Sign out; the browser's separate guest progress should reappear. Verify that another Google account cannot see the first account's progress.
 
 If Google reports `auth/unauthorized-domain`, add the exact current hostname above. If the profile shows a Firestore permissions error, publish this repository's rules. `CONFIGURATION_NOT_FOUND` means Authentication has not been initialized for this project. API-key HTTP referrer restrictions, if enabled in Google Cloud Console, must allow both public hosts, `identitytoolkit.googleapis.com`, `securetoken.googleapis.com`, and Firestore's required APIs as applicable.
 

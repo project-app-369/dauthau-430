@@ -8,7 +8,7 @@ args.add_argument('--portable',action='store_true')
 args.add_argument('--out-dir')
 options=args.parse_args()
 meta=json.loads((r/'app-metadata.json').read_text(encoding='utf8'))
-base='' if options.portable else (options.site_url or meta['sites_url']).rstrip('/')+'/'
+base='' if options.portable else (options.site_url or meta['publication_url']).rstrip('/')+'/'
 if base and urlparse(base).scheme!='https':raise ValueError('Publication URL must use HTTPS')
 dist=Path(options.out_dir).resolve() if options.out_dir else r/'dist'
 dist.mkdir(exist_ok=True,parents=True)

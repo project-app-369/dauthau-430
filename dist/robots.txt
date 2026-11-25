@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://dauthau-430.ptsc-7423.chatgpt.site/sitemap.xml
+Sitemap: https://project-app-369.github.io/dauthau-430/sitemap.xml
