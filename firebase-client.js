@@ -1,6 +1,8 @@
 (function(){
  'use strict';
  const config={apiKey:'AIzaSyCkC49tuwJNpuz242O_qL_HP_B1QtvgWyM',authDomain:'dauthau-430.firebaseapp.com',projectId:'dauthau-430',storageBucket:'dauthau-430.firebasestorage.app',messagingSenderId:'872139121059',appId:'1:872139121059:web:d6147288fb0f502a8e7a16',measurementId:'G-HXKBBN7H4T'};
+ const appCheckConfig=JSON.parse(document.getElementById('firebase-appcheck-config').textContent);
+ let appCheckStatus=appCheckConfig.siteKey?'loading':'not-configured';
  const M=window.CourseSyncModel,host=window.CourseState,base=host.key;
  const el=id=>document.getElementById(id),copy=M.clone;
  const person='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg>';
@@ -11,6 +13,7 @@
   const code=String(err?.code||''),reason=err?.reason||'';
   if(/configuration-not-found|operation-not-allowed/.test(code))return 'Firebase chưa bật đăng nhập Google. Vui lòng bật Authentication trong Firebase Console.';
   if(/unauthorized-domain/.test(code))return 'Tên miền này chưa được thêm vào Authorized domains trong Firebase Authentication.';
+  if(/^appcheck\//i.test(code))return 'App Check chưa xác minh được ứng dụng. Hãy kiểm tra provider reCAPTCHA và domain đang mở app.';
   if(reason==='SERVICE_DISABLED')return 'Cloud Firestore API chưa bật. Hãy tạo database (default) và bật API trong Firebase Console.';
   if(/permission-denied/.test(code))return 'Firestore từ chối truy cập. Hãy kiểm tra rules trên database (default), trạng thái API và App Check.';
   if(/unauthenticated|user-token-expired|invalid-user-token/.test(code))return 'Phiên đăng nhập cần được xác nhận lại. Hãy đăng xuất và đăng nhập Google lại.';
@@ -21,7 +24,7 @@
   if(err?.name==='QuotaExceededError')return 'Bộ nhớ trình duyệt đã đầy. Hãy xuất JSON để giữ bản sao tiến độ.';
   return 'Chưa kết nối được Firebase. Tiến độ vẫn lưu trên máy. '+(code?'('+code+')':'');
  }
- function diagnostics(){return{projectId:config.projectId,database:'(default)',authenticated:!!auth?.currentUser,online:navigator.onLine,transport,pending:outbox.length,lastCloudAt,error:lastError?{code:lastError.code||lastError.name||'unknown',reason:lastError.reason||''}:null};}
+ function diagnostics(){return{projectId:config.projectId,database:'(default)',authenticated:!!auth?.currentUser,online:navigator.onLine,transport,appCheck:{configured:!!appCheckConfig.siteKey,status:appCheckStatus},pending:outbox.length,lastCloudAt,error:lastError?{code:lastError.code||lastError.name||'unknown',reason:lastError.reason||''}:null};}
  function report(err){lastError=err;ui('Chưa đồng bộ',message(err));}
  function synced(){ui(!navigator.onLine?'Ngoại tuyến · đã lưu trên máy':outbox.length?'Đang đồng bộ…':'Đã đồng bộ');}
  function ui(text,err=''){status=text;error=err;if(!err)lastError=null;el('accountName').textContent=user?.displayName||user?.email||'Đăng nhập';el('accountStatus').textContent=status;el('accountButton').setAttribute('aria-label',user?'Hồ sơ '+(user.displayName||user.email)+'. '+status:'Đăng nhập và đồng bộ tiến độ');el('accountAvatar').innerHTML=person;if(user?.photoURL){try{const url=new URL(user.photoURL);if(url.protocol==='https:'){const img=document.createElement('img');img.src=url.href;img.alt='';img.referrerPolicy='no-referrer';img.onerror=()=>{el('accountAvatar').innerHTML=person;};el('accountAvatar').replaceChildren(img);}}catch{}}el('profileName').textContent=user?.displayName||'Học trên mọi thiết bị';el('profileEmail').textContent=user?.email||'Đăng nhập Google để tự động đồng bộ tiến độ học, flashcard và lịch sử ôn luyện.';el('profileStatus').textContent=error||status;el('profileStatus').classList.toggle('sync-error',!!error);el('googleLogin').hidden=!!user;el('logoutAccount').hidden=!user;el('retrySync').hidden=!user||(ready&&!error);el('syncFallbackNote').hidden=!account||transport!=='https';el('syncDiagnostic').textContent=JSON.stringify(diagnostics(),null,2);}
@@ -98,7 +101,26 @@
    },()=>{if(epoch===run){clearTimeout(connectTimer);fallback();}});
   }catch{fallback();}
  }
- async function load(){if(loading)return loading;if(sdk)return;loading=(async()=>{const version='13.2.0',url='https://www.gstatic.com/firebasejs/'+version+'/';const [app,a,f]=await Promise.all([import(url+'firebase-app.js'),import(url+'firebase-auth.js'),import(url+'firebase-firestore.js')]);sdk={...a,...f};const instance=app.initializeApp(config);auth=a.getAuth(instance);db=f.initializeFirestore(instance,{localCache:f.memoryLocalCache(),experimentalForceLongPolling:true,experimentalLongPollingOptions:{timeoutSeconds:5}});http=window.CourseSyncHttp.create({projectId:config.projectId,getToken:async owner=>{if(auth.currentUser?.uid!==owner)throw Object.assign(Error('Account changed'),{code:'unauthenticated'});return a.getIdToken(auth.currentUser);}});await a.setPersistence(auth,a.browserLocalPersistence);a.onAuthStateChanged(auth,n=>{changed(n).catch(err=>ui('Chưa đồng bộ',message(err)));},err=>ui('Chưa kết nối',message(err)));})();try{await loading;}catch(err){sdk=null;loading=null;ui('Chưa kết nối',message(err));throw err;}}
+ async function load(){
+  if(loading)return loading;if(sdk)return;
+  loading=(async()=>{
+   const version='13.2.0',url='https://www.gstatic.com/firebasejs/'+version+'/';
+   const [app,a,f,c]=await Promise.all([import(url+'firebase-app.js'),import(url+'firebase-auth.js'),import(url+'firebase-firestore.js'),import(url+'firebase-app-check.js')]);
+   sdk={...a,...f};const instance=app.initializeApp(config);
+   // Register App Check before Auth/Firestore initialize so the SDK listener also obtains attestation.
+   let getAppCheckToken;
+   if(appCheckConfig.siteKey){
+    const appCheck=c.initializeAppCheck(instance,{provider:new c.ReCaptchaEnterpriseProvider(appCheckConfig.siteKey),isTokenAutoRefreshEnabled:true});
+    getAppCheckToken=async()=>{try{const result=await c.getToken(appCheck,false);appCheckStatus='valid';return result.token;}catch(e){appCheckStatus='error';throw e;}};
+   }
+   auth=a.getAuth(instance);
+   db=f.initializeFirestore(instance,{localCache:f.memoryLocalCache(),experimentalForceLongPolling:true,experimentalLongPollingOptions:{timeoutSeconds:5}});
+   http=window.CourseSyncHttp.create({projectId:config.projectId,getAppCheckToken,getToken:async owner=>{if(auth.currentUser?.uid!==owner)throw Object.assign(Error('Account changed'),{code:'unauthenticated'});return a.getIdToken(auth.currentUser);}});
+   await a.setPersistence(auth,a.browserLocalPersistence);
+   a.onAuthStateChanged(auth,n=>{changed(n).catch(report);},report);
+  })();
+  try{await loading;}catch(err){sdk=null;loading=null;report(err);throw err;}
+ }
  window.CourseSync={capture,replace(){replace=true;},diagnostics};
  el('accountButton').onclick=()=>el('accountDialog').showModal();el('closeAccount').onclick=()=>el('accountDialog').close();
  el('googleLogin').onclick=async()=>{const button=el('googleLogin');button.disabled=true;try{await load();const provider=new sdk.GoogleAuthProvider();provider.setCustomParameters({prompt:'select_account'});await sdk.signInWithPopup(auth,provider);}catch(err){if(!/popup-closed-by-user|cancelled-popup-request/.test(err.code||''))ui('Chưa đăng nhập',message(err));}finally{button.disabled=false;}};

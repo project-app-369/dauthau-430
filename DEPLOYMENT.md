@@ -12,6 +12,8 @@ Build metadata for a specific domain with `python build-site.py --site-url https
 
 Serve `.webmanifest` as `application/manifest+json` (or JSON) and `sw.js` as JavaScript. Recommended cache headers for `sw.js`, `index.html`, `manifest.webmanifest`, `version.json`: `Cache-Control: no-cache`. Keep the worker scope limited to the app directory. No SPA rewrite is needed. Do not cache an authentication page as index.html.
 
+The public builds use App Check with a reCAPTCHA Enterprise key restricted to the GitHub Pages and ChatGPT Sites domains. Before deploying to another CDN/shared-hosting domain, register that hostname in both Firebase Auth Authorized domains and the reCAPTCHA key's allowed domains. `firebase-appcheck.json` holds the public site key; it is embedded in the built HTML. See [FIREBASE-SETUP.md](FIREBASE-SETUP.md). Firestore App Check remains Enforced; billing is not enabled by this setup.
+
 ## PWA
 
 The install icon uses the native install prompt when available. On Safari/iOS or when a prompt is unavailable, it opens platform instructions. Installation requires the user's browser confirmation. The icon is hidden in standalone mode.

@@ -50,6 +50,7 @@ html=html.replace('/*METADATA*/','\n'.join(metadata))
 html=html.replace('src="./icons/app-icon.svg"','src="./'+icon_assets['icons/app-icon.svg']+'"')
 for marker,name in [('STYLE','fluent.css'),('THEME','theme.js'),('APP','app.js'),('PWA','pwa.js'),('SYNC_MODEL','sync-model.js'),('SYNC_HTTP','sync-http.js'),('FIREBASE','firebase-client.js')]:
  html=html.replace('/*'+marker+'*/',(r/name).read_text(encoding='utf8'))
+html=html.replace('/*APP_CHECK_CONFIG*/',json.dumps(json.loads((r/'firebase-appcheck.json').read_text(encoding='utf8')),ensure_ascii=False).replace('</','<\\/'))
 html=html.replace('/*CONTENT*/',json.dumps(data,ensure_ascii=False).replace('</','<\\/'))
 (dist/'index.html').write_text(html,encoding='utf8')
 manifest=json.loads((dist/'manifest.webmanifest').read_text(encoding='utf8'))

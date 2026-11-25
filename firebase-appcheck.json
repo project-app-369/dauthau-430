@@ -1,0 +1,8 @@
+{
+  "provider": "recaptcha-enterprise",
+  "siteKey": "6LeVMjEuAAAAAKi5h-bjzkiVPzNbP9-oKfRdyAI8",
+  "allowedDomains": [
+    "project-app-369.github.io",
+    "dauthau-430.ptsc-7423.chatgpt.site"
+  ]
+}
